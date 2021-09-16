@@ -7,3 +7,43 @@
 #canvas{
     border: 2px solid black;
 }
+
+.container{
+    background-color: lightgray;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.toolbar-container{
+    width: min-content;
+    height: min-content;
+    padding: 5px;
+    background-color: white;
+    border-radius: 35px;
+}
+
+.toolbar-icon{
+    border-radius: 50%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toolbar-icon.selected{
+    color: white;
+    background-color: black;
+}
+
+.toolbar-icon:hover{
+    cursor: pointer;
+    background-color: rgb(221, 221, 221);
+}
+
+.toolbar-icon.selected:hover{
+    background-color: rgba(0, 0, 0, 0.911);
+    cursor: pointer;
+}

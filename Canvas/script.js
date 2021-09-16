@@ -25,6 +25,7 @@ window.addEventListener("load", () => {
   function draw(e) {
     if (!drawing) return;
     ctx.lineWidth = 10;
+    ctx.strokeStyle = "#017c41";
     ctx.lineCap = "round";
     ctx.lineTo(e.pageX, e.pageY);
     ctx.stroke();
@@ -40,13 +41,14 @@ window.addEventListener("load", () => {
 
   //   Resizing
   // https://stackoverflow.com/questions/11179274/html-canvas-drawing-disappear-on-resizing
+  //   https://stackoverflow.com/questions/4938346/canvas-width-and-height-in-html5
 
   // Temporary canvas to store the current state
   let inMemCanvas = document.createElement("canvas");
   let inMemCtx = inMemCanvas.getContext("2d");
 
   window.addEventListener("resize", () => {
-    //   Store the current state of the canvas
+    // Store the current state of the canvas into the temporary canvas
     inMemCanvas.width = canvas.width;
     inMemCanvas.height = canvas.height;
     inMemCtx.drawImage(canvas, 0, 0);
