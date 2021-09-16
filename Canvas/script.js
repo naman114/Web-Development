@@ -37,9 +37,25 @@ window.addEventListener("load", () => {
   canvas.addEventListener("mousedown", startDraw);
   canvas.addEventListener("mouseup", endDraw);
   canvas.addEventListener("mousemove", draw);
-});
 
-window.addEventListener("resize", () => {
-  canvas.height = window.innerHeight;
-  canvas.width = window.innerWidth;
+  //   Resizing
+  // https://stackoverflow.com/questions/11179274/html-canvas-drawing-disappear-on-resizing
+
+  // Temporary canvas to store the current state
+  let inMemCanvas = document.createElement("canvas");
+  let inMemCtx = inMemCanvas.getContext("2d");
+
+  window.addEventListener("resize", () => {
+    //   Store the current state of the canvas
+    inMemCanvas.width = canvas.width;
+    inMemCanvas.height = canvas.height;
+    inMemCtx.drawImage(canvas, 0, 0);
+
+    // Reset the canvas dimensions
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    // Redraw the temporary canvas
+    ctx.drawImage(inMemCanvas, 0, 0);
+  });
 });
