@@ -6,22 +6,37 @@ window.addEventListener("load", () => {
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
 
-  // Shapes
-  //   ctx.fillRect(20, 20, 100, 100);
-  //   ctx.strokeStyle = "red";
-  //   ctx.lineWidth = 10;
-  //   ctx.strokeRect(20, 20, 100, 100);
+  //   Variables
+  let drawing = false;
 
-  //   Lines (Pentagon)
-  ctx.beginPath();
-  ctx.moveTo(150, 150);
-  ctx.lineTo(250, 150);
-  ctx.lineTo(250, 250);
-  ctx.lineTo(200, 300);
-  ctx.lineTo(150, 250);
-  //   ctx.lineTo(150, 150);
-  ctx.closePath();
-  ctx.stroke();
+  //   Functions
+  function startDraw(e) {
+    drawing = true;
+
+    // Clicks will now give dots
+    draw(e);
+  }
+  function endDraw(e) {
+    drawing = false;
+
+    // Lifting the pen
+    ctx.beginPath();
+  }
+  function draw(e) {
+    if (!drawing) return;
+    ctx.lineWidth = 10;
+    ctx.lineCap = "round";
+    ctx.lineTo(e.pageX, e.pageY);
+    ctx.stroke();
+
+    // Reduces pixelation
+    ctx.beginPath();
+    ctx.moveTo(e.pageX, e.pageY);
+  }
+  // EventListeners
+  canvas.addEventListener("mousedown", startDraw);
+  canvas.addEventListener("mouseup", endDraw);
+  canvas.addEventListener("mousemove", draw);
 });
 
 window.addEventListener("resize", () => {
