@@ -6,19 +6,20 @@
 
 #canvas{
     border: 2px solid black;
+    margin: 10px;
 }
 
 .container{
     background-color: lightgray;
     display: flex;
     align-items: center;
-    /* justify-content: center; */
 }
 
 .toolbar-container{
     width: min-content;
     height: min-content;
     padding: 5px;
+    margin: 10px;
     background-color: white;
     border-radius: 35px;
 }
@@ -34,8 +35,8 @@
 }
 
 .toolbar-icon.selected{
-    color: white;
-    background-color: black;
+    /* background-color: black; */
+    border: 2px solid black;
 }
 
 .toolbar-icon:hover{
