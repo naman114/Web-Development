@@ -1,44 +1,49 @@
-/* Type conversion and type coercion */
-let myVar, boolVar;
+/* Strings: Properties, methods and template literals */
 
-myVar = String(34);
-boolVar = String(true);
+let str = "Hi";
 
-console.log(myVar, typeof myVar); // 34 string
-console.log(boolVar, typeof boolVar); // true string
+str = str.concat(" Hello", " Sup");
 
-let date = String(new Date());
-console.log(date); // Sun Sep 26 2021 20:48:46 GMT+0530 (India Standard Time)
+console.log(
+  "",
+  str,
+  "\n",
+  str.length,
+  "\n",
+  str.toLowerCase(),
+  "\n",
+  str.toUpperCase()
+);
 
-let arr = String([1, 2, 3]);
-console.log([arr, arr.length]); // (2) ['1,2,3', 5]
-
-// String() can be replaced with myVar.toString()
-
-let stri = Number("123");
-console.log(stri, typeof stri); // 123 'number'
-
-stri = Number("1a");
-console.log(stri, typeof stri); // NaN 'number'
-
-stri = Number(true);
-console.log(stri, typeof stri); // 1 'number'
-
-stri = parseInt("123.123");
-console.log(stri, typeof stri); // 123 'number'
-
-stri = parseFloat("123.123");
-console.log(stri, typeof stri); // 123.123 'number'
-
-// Number() encompasses both parseInt and parseFloat
-
-console.log(stri.toFixed(1)); // 123.1
-
-/* Type coercion
-String + Number == String + String
+/* 
+Hi Hello Sup 
+12 
+hi hello sup 
+HI HELLO SUP
 */
 
-stri = "123";
-myVar = 12;
-let ans = stri + myVar;
-console.log(ans, typeof ans);
+console.log(str[0]); // H
+console.log(str.charAt(0)); // H
+
+console.log(str.indexOf("Hello")); // 3
+console.log(str.indexOf("Bro")); // -1
+
+console.log(str.endsWith(" Sup")); // true
+console.log(str.includes("o S")); // true
+
+console.log(str.substring(3, 5)); // He
+
+console.log(str.split(" ")); // (3) ['Hi', 'Hello', 'Sup']
+
+console.log(str.replace("Hi", "Bruh"));
+// Only first occurence.
+// Bruh Hello Sup
+
+let person = "Alice";
+let hobby = "cooking";
+
+let data = `<h1>Winner of today's contest</h1>
+            <p>${person} who likes ${hobby}</p>
+`;
+
+document.body.innerHTML = data;
