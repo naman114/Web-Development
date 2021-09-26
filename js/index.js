@@ -1,24 +1,25 @@
-// Printing as is
-console.log("Hello js!");
-console.log(34 + 1);
+// Variables: var, let, const
 
-// JS objects
-console.log({ name: "Naman", id: 12 });
-console.table({ name: "Naman", id: 12 });
+// Single/double/back ticks
+var name1 = "naman";
+var name2 = "naman";
+var name3 = `na"m"an`;
 
-// Warnings
-console.warn("This is a warning");
+// Logged as array
+console.log([name1, name2, name3]);
+// Logged as space separated
+console.log(name1, name2, name3);
 
-// Clear the console
-console.clear();
+// undefined
+var id;
+console.log({ id });
 
-// Measure time to execute. Addition took is the identifier.
-console.time("Addition took");
-console.log(12 + 3);
-console.timeEnd("Addition took");
+// Weakly typed (Implicit conversions)
+id = 2;
+console.log(id + "hello");
 
-// Assertions. Counted as error message. The given string is displayed when the assertion fails.
-console.assert(2 < 1, "Invalid");
+// Dynamically typed (type checks at runtime)
+id = "naman";
+console.log(id);
 
-// Error message
-console.error("This is an error");
+/* _ and $ can be used as first char of variable names but should be avoided due to their use in object-oriented js and jQuery*/
