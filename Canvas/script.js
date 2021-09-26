@@ -26,9 +26,11 @@ window.addEventListener("load", () => {
   }
   function draw(e) {
     if (!drawing) return;
+
     ctx.lineWidth = 10;
     ctx.strokeStyle = curStrokeStyle;
     ctx.lineCap = "round";
+
     let coord = getMousePos(canvas, e);
     ctx.lineTo(coord.x, coord.y);
     ctx.stroke();
@@ -43,7 +45,7 @@ window.addEventListener("load", () => {
   canvas.addEventListener("mousemove", draw);
 
   //   Resizing
-  // https://stackoverflow.com/questions/11179274/html-canvas-drawing-disappear-on-resizing
+  //   https://stackoverflow.com/questions/11179274/html-canvas-drawing-disappear-on-resizing
   //   https://stackoverflow.com/questions/4938346/canvas-width-and-height-in-html5
 
   // Temporary canvas to store the current state
