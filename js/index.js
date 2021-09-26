@@ -1,25 +1,33 @@
 // Variables: var, let, const
 
-// Single/double/back ticks
-var name1 = "naman";
-var name2 = "naman";
-var name3 = `na"m"an`;
+// const
+/* Invalid: Missing initializer in const declaration
+const name; */
 
-// Logged as array
-console.log([name1, name2, name3]);
-// Logged as space separated
-console.log(name1, name2, name3);
+// Cannot modify hereinafter
+const name = "Naman";
+// Irrespective of const, arrays and objects can be modified using their functions but cannot be reassigned
+const arr = [1, 2, 3];
+// Valid
+arr.push(4);
+console.log(arr);
+// Invalid
+// arr = [5, 6];
 
-// undefined
-var id;
-console.log({ id });
+// let: block level scope. var has global scope
+var city = "goa";
+{
+  let city = "delhi";
+  console.log({ city });
+}
+console.log({ city });
 
-// Weakly typed (Implicit conversions)
-id = 2;
-console.log(id + "hello");
+// let and const when used together remove the need to use var. let variables stay in block so easier to read and maintain the code
 
-// Dynamically typed (type checks at runtime)
-id = "naman";
-console.log(id);
-
-/* _ and $ can be used as first char of variable names but should be avoided due to their use in object-oriented js and jQuery*/
+/* 
+Commonly used cases
+1. PascalCase
+2. camelCase
+3. kebab-case
+4. snake_case
+*/
