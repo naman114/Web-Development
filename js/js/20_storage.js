@@ -7,7 +7,39 @@ const d = function (ele) {
   console.log(ele);
 };
 
-// Localstorage is permanent
+// Localstorage is permanent. No expiry for the data.
+
+/* Cookies require network calls so slower. It can store just 4000 bytes. LS stores atleast 5 MB of data. Memory depends on the type of device. LS user data is useful when the data is not relevant enough to be stored on the server, or some testing needs to be done with it or just to improve the performance of a web app  */
+
+/* Same Origin Policy of these Storage APIs 
+
+Useful for security purposes
+
+Origin: Protocol + Host/Domain + Port
+
+Protocol: http or https
+Host/Domain: amazon.in
+Port: 5050
+
+Setting data into local storage is done for a particular origin.
+
+Example: Assume that some data is set for http://amazon.in
+
+Will it be accessible from?
+
+1. http://amazon.in/cart 
+YES. Origin is the same, an extra path is given
+
+2. https://amazon.in
+NO
+
+3. http://prices.amazon.in
+NO
+
+4. http://amazon.in:8080
+NO
+
+*/
 
 localStorage.setItem("Name", "Alice");
 
