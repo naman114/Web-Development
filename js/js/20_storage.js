@@ -27,9 +27,9 @@ localStorage.setItem("Persons", arr);
 d(typeof (res = localStorage.getItem("Persons"))); //string
 
 /* Solution: 
-Use JSON.stringify(): Object -> String 
-and JSON.parse(): String -> Object
-*/
+  Use JSON.stringify(): Object -> String 
+  and JSON.parse(): String -> Object
+  */
 localStorage.setItem("People", JSON.stringify(arr));
 d(typeof (res = JSON.parse(localStorage.getItem("People")))); //object
 
