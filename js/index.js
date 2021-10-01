@@ -38,3 +38,22 @@ function fun() {
 }
 
 // So, everything in JS is an object since down the prototype chain, everything is an object
+
+console.clear();
+
+let object1 = {
+  name: "Bob",
+};
+
+// Never do this
+object1.__proto__ = object;
+
+console.log(object1.giveIntro()); // Bob lives in Wonderland
+
+// Change default proto of all functions
+Function.prototype.mybind = function () {
+  console.log("Binded!");
+};
+
+function funny() {}
+// funny.__proto__.mybind() -> Binded!
