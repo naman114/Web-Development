@@ -1,4 +1,4 @@
-/* Object Prototype in JS */
+/* Object Prototype in JS: ES6 classes have replaced the prototype syntax now */
 
 /* 
 console logging an object created using an object literal has a protype at the end. This is the starting point for that object i.e. some functionality that it already has.
