@@ -1,30 +1,6 @@
 console.log("hello");
 
-function namesIterator(arr) {
-  let nextIdx = 0;
-
-  return {
-    next: function () {
-      if (nextIdx < arr.length) {
-        return {
-          value: arr[nextIdx++],
-          done: false,
-        };
-      } else {
-        return {
-          done: true,
-        };
-      }
-    },
-  };
-}
-
-const names = ["Alice", "Bob", "Charlie", "Dwayne", "Elliot", "Forrest"];
-const namesItr = namesIterator(names);
-console.log(namesItr.next());
-console.log(namesItr.next());
-console.log(namesItr.next());
-console.log(namesItr.next());
-console.log(namesItr.next());
-console.log(namesItr.next());
-console.log(namesItr.next()); //done: true
+// var audio = new Audio(
+//   "https://cdn.videvo.net/videvo_files/audio/premium/audio0122/watermarked/JungleSouthAmerica EE201201_preview.mp3"
+// );
+// audio.play();
