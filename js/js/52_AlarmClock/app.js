@@ -1,14 +1,15 @@
 console.log("Hello alarm");
 
+// To update the current time (Live)
 setInterval(() => {
   let now = new Date();
   let localTime = document.getElementById("localTime");
   localTime.innerText = now;
 }, 1000);
 
-let alarmName = document.getElementById("alarmName");
-let dateTime = document.getElementById("dateTime");
-let addBtn = document.getElementById("addBtn");
+const alarmName = document.getElementById("alarmName");
+const dateTime = document.getElementById("dateTime");
+const addBtn = document.getElementById("addBtn");
 
 let isSetAlarm = false;
 let isSetDateTime = false;
@@ -16,10 +17,8 @@ let isSetDateTime = false;
 let audio = new Audio(
   "https://cdn.videvo.net/videvo_files/audio/premium/audio0122/watermarked/JungleSouthAmerica EE201201_preview.mp3"
 );
-// For the setinterval function
-let ringer;
 
-// Already stored alarms
+// Already stored alarms in localStorage
 showAlarms();
 
 alarmName.addEventListener("blur", () => {
@@ -36,8 +35,18 @@ dateTime.addEventListener("blur", () => {
     dateTime.classList.add("is-invalid");
     isSetDateTime = false;
   } else {
-    dateTime.classList.remove("is-invalid");
-    isSetDateTime = true;
+    let curObj = getDateTimeObject(dateTime.value);
+    let now = new Date();
+
+    // Entered date must be in the future
+    if(now > curObj){
+      dateTime.classList.add("is-invalid");
+      isSetDateTime = false;
+    }
+    else{
+      dateTime.classList.remove("is-invalid");
+      isSetDateTime = true;
+    }
   }
 });
 
@@ -69,7 +78,7 @@ function showAlarms(name, dateTime) {
     alarmsArray = JSON.parse(storedAlarms);
   }
 
-  // Preparing innerHTML
+  // Preparing innerHTML for the available alarms
   let html = "";
 
   alarmsArray.forEach(function (ele, idx) {
@@ -94,26 +103,24 @@ function showAlarms(name, dateTime) {
   }
 }
 
+// Live calculation and display of remaining time before the alarm rings
 function getRemainingTime(current, remainingId) {
   console.log({ current });
   setInterval(() => {
-    let dateTime = current.split("T");
-
-    let curObj = new Date(dateTime[0] + " " + dateTime[1]);
+    let curObj = getDateTimeObject(current);
 
     let now = new Date();
-    // console.log({ curObj });
-    // console.log({ now });
 
     let milliSecondsLeft = curObj - now;
 
     let minutesLeft = parseInt(milliSecondsLeft / (1000 * 60));
     console.log({ minutesLeft });
 
-    if (now >= curObj) {
-      document.getElementById(remainingId).innerText = `RINGING`;
-      document.getElementById(remainingId.split("-")[1]).innerText = "Stop";
-      ringer = setInterval(alarmStart, 1000);
+    if (milliSecondsLeft <= 0) {
+      document.getElementById(
+        remainingId
+      ).innerText = "RINGING";
+      audio.play();
     } else {
       document.getElementById(
         remainingId
@@ -123,11 +130,9 @@ function getRemainingTime(current, remainingId) {
 }
 
 function deleteAlarm(idx) {
-  if (document.getElementById(idx).innerText === "Stop") {
-    console.log("YES");
-    alarmStop();
-    clearInterval(ringer);
-  }
+  // Pauses the already ringing alarm
+  audio.pause();
+  
   let storedAlarms = localStorage.getItem("alarms");
   let alarmsArray = [];
 
@@ -140,10 +145,8 @@ function deleteAlarm(idx) {
   showAlarms();
 }
 
-function alarmStart() {
-  audio.play();
-}
-
-function alarmStop() {
-  audio.pause();
+function getDateTimeObject(current){
+  let dateTime = current.split("T");
+  let curObj = new Date(dateTime[0] + " " + dateTime[1]);
+  return curObj;
 }
