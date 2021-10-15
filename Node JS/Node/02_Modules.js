@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const text = fs.readFileSync("./datasrc.txt", "utf-8");
 
-console.log(typeof text); // Without encoding, it returns buffer
+console.log(typeof text); // Without encoding, it returns buffer. Currently it is string
 console.log(text);
 
 let a = text.replace("sample", "editedSample");

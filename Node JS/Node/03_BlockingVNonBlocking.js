@@ -3,6 +3,8 @@ Node.js works on non-blocking IO model
 */
 
 const fs = require("fs");
+
+// The callback function will execute once the file has been read
 let text = fs.readFile("datasrc.txt", "utf-8", (err, data) => {
   if (err) throw err;
   console.log(data);
