@@ -15,9 +15,7 @@ const server = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader("Content-Type", "text/html");
 
-  if (req.url === "/") {
-    res.end(home);
-  } else if (req.url === "/home") {
+  if (req.url === "/" || req.url === "/home") {
     res.end(home);
   } else if (req.url === "/about") {
     res.end(about);
@@ -29,6 +27,8 @@ const server = http.createServer((req, res) => {
     res.statusCode = 404;
     res.end("<h1>404 Not Found</h1>");
   }
+
+  // Express JS is used to avoid writing conditional logic to serve files like above
 });
 
 server.listen(port, hostname, () => {
