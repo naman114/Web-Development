@@ -11,39 +11,23 @@ const port = 80;
 /* Use `code .` to open a VS Code session of just one directory */
 /* pug is a template engine */
 
+// EXPRESS RELATED CONFGS
 app.use("/static", express.static("static"));
 
-// Set the template engine aas pug
-app.set("view engine", "pug");
+// PUG RELATED CONFGS
+app.set("view engine", "pug"); // Set the template engine aas pug
+app.set("views", path.join(__dirname, "views")); // Set the views directory
 
-// Set the views directory
-app.set("views", path.join(__dirname, "views"));
-
-// Pug demo endpoint
-app.get("/demo", function (req, res) {
-  res.status(200).render("demo", { title: "Hey", message: "Hello there!" });
-});
-
+// ENDPOINTS
 app.get("/", (req, res) => {
-  res.send("This is the home page");
+  const params = {
+    title: "Hello from params",
+    content: "Plain HTML using Pug (from params)",
+  };
+  res.status(200).render("index.pug", params);
 });
 
-app.get("/about", (req, res) => {
-  res.status(201).send("This is the about page");
-});
-
-app.post("/about", (req, res) => {
-  res.send("This is a post request from the about page");
-});
-
-app.get("/contact", (req, res) => {
-  res.send("This is the contact page");
-});
-
-app.get("/report", (req, res) => {
-  res.send("This is the report page");
-});
-
+// START THE SERVER
 app.listen(port, () => {
   console.log(`App started successfully on port ${port}`);
 });
