@@ -1,0 +1,17 @@
+{
+  "name": "08_express",
+  "version": "1.0.0",
+  "description": "This is a demo for express ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Express"
+  ],
+  "author": "Naman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
