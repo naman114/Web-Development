@@ -44,15 +44,19 @@ config
 local
 
 $ show collections
-// Nothing as nothing is present
+// No output as nothing is present
 
 $ db.text // Create a collection
 
+$ show collections
+// No output as collection `text` has nothing in it
+
 $ db.text.insert({}) // Insert an empty document
+
+$ show collections
+text
 
 $ show dbs
 // Will now show your db also
-
-$ show collections
 
 $ db.text.insert({"name": "Alice"})

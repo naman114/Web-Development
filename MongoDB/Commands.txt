@@ -1,0 +1,75 @@
+// Inserting data 
+
+use mydb
+
+db.items.insertOne({name: "Mi", price: 20000, rating: 4.6, qty: 230, sold: 32}) // One object
+
+
+db.items.insertMany([{name: "Mi", price: 20000, rating: 4.6, qty: 230, sold: 32}, {name: "Huawei", price: 15000, rating: 4.9, qty: 230, sold: 32}]) // Array of objects
+
+
+db.items.find() // Returns all items
+
+/* 
+- Right click to paste in PS 
+- ObjectId is the primary key that is auto generated
+  It ensures that duplicate data can exist and can be queried
+- No fixed schema is present here meaning you can vary the column count and name with each entry
+*/
+
+
+
+// Querying Data
+
+db.items.find({price: 15000}) 
+// Give a filter object to find(). It compares all docs with the filter object
+
+
+db.items.find({rating: {$gte: 3.5}})
+/* gte, gt, lte, lt */
+
+
+db.items.find({rating: {$gte: 3.5}, price: {$gt: 19000}})
+/* And operator is comma , */
+
+
+db.items.find({$or:[{rating: {$gte: 3.5}}, {price: {$gt: 19000}}]})
+/*
+db.items.find({
+                $or: [
+                    {rating: {$gte: 3.5}},
+                    {price: {$gt: 19000}}
+                    ]
+            })
+OR operator syntax expanded^ 
+*/
+
+
+db.items.find({rating: {$gt: 4.7}}, {name: 1})
+/* Second argument is called projection. Those fields will be shown which are any non zero value. For zero it shows an error that exclusion is not possible*/
+
+
+
+// Deleting Data (Smilar to search)
+
+db.items.deleteOne({price: 20000})
+// Will delete first entry found
+
+
+db.items.deleteMany({price: 20000})
+// Will delete all entries found
+
+
+
+
+// Updating Data
+
+ 
+
+
+
+
+
+
+
+
