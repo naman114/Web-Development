@@ -1,0 +1,58 @@
+// What is MongoDB?
+MongoDB is a NoSQL document oriented database written in C++
+
+// Specifics
+To be document oriented means it stores data as documents
+-Data is stored as BSON (Different from JSON as we have to write the data types as well)
+-Here,
+    Database = Database
+    Tabes = Collections
+    Rows = Documents
+    When compared to a relational db like SQL
+
+// Working
+`mongod` is the host process for the database
+`mongo`  is the command line shell that connects to a specific instance of mongod
+Running the command `mongo` defaults to connecting to the localhost on port 27017
+
+// Downloading
+Search for `mongodb downloads center`
+Navigate to community server and download
+Uncheck Install MongoD as a service (Run MongoD manually on PC and as a service on the server)
+Install MongoDB Compass
+After installation, create data/db inside C drive
+Create Path variable for ProgramFiles/MongoDB/server/5.0/bin
+Right click windows icon > Open powershell as admin
+The mongo command won't work directly without a mongod host process
+Run mongod 
+Open a new PS instance
+Run mongo
+
+// Basic usage of the shell
+$ db
+test // default db is test
+
+$ use mydb
+switched to db mydb // If not present, it creates the db you mention after use
+
+$ use test
+switched to db test
+
+$ show dbs
+admin
+config
+local
+
+$ show collections
+// Nothing as nothing is present
+
+$ db.text // Create a collection
+
+$ db.text.insert({}) // Insert an empty document
+
+$ show dbs
+// Will now show your db also
+
+$ show collections
+
+$ db.text.insert({"name": "Alice"})
