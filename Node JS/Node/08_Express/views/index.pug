@@ -17,8 +17,17 @@
       </ul>
     </nav>
     <div class="container">
-      <h1>Hello from Pug</h1>
+      <h1>Gym Membership</h1>
       <p>#{content}</p>
+
+      <form action="/" method="post" id="gym-membership">
+        <input type="text" name="name" id="name" placeholder="Enter your name">
+        <input type="text" name="age" id="age" placeholder="Enter your age">
+        <input type="text" name="gender" id="gender" placeholder="Enter your gender">
+        <textarea name="address" id="address" cols="30" rows="10" placeholder="Where do you live"></textarea>
+        <textarea name="additional" id="additional-info" cols="30" rows="10" placeholder="Tell us more about yourself"></textarea>
+        <button class="btn">Submit</button>
+      </form>
     </div>
   </body>
 </html>

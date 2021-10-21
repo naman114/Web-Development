@@ -35,3 +35,17 @@ a {
   flex-direction: column;
   align-items: center;
 }
+
+input,
+textarea {
+  margin: 10px;
+  padding: 3px;
+  outline: none;
+  border-radius: 7px;
+  border: 2px solid lightgray;
+}
+
+#gym-membership {
+  display: flex;
+  flex-direction: column;
+}
