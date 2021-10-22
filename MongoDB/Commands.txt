@@ -1,3 +1,5 @@
+CRUD
+
 // Inserting data 
 
 use mydb
@@ -64,7 +66,22 @@ db.items.deleteMany({price: 20000})
 
 // Updating Data
 
- 
+db.items.insertMany([{name: "Samsung M31s", price: 14500, rating: 4.95, qty: 1200, sold: 1350}, {name: "OPPO F1", price: 17999, rating: 4.3, qty: 12000, sold: 340}, {name: "Poco P7 Ultra Lite", price: 8999, rating: 4.4, qty: 6700, sold: 5500}])
+
+db.items.updateOne({name: "Samsung M31s"}, {$set: {price: 2}});
+// Filter object (the selector), 
+
+db.items.updateMany({name: "Samsung M31s"}, {$set: {price: 2}});
+
+
+Connecting to MongoDB
+
+PS(CLI) and MongoDBCompass(GUI) and Mongoose(from Node.js)
+
+Compass is GUI for manipluating the data instead of using the CLI. So `mongod` must be executed since compass is just a GUI alternative for `mongo`
+
+Mongoose is an Object Data Modeling (ODM) Library for MongoDB and Node.js
+It is a layer between Node.js and MongoDB
 
 
 
