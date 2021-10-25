@@ -1,9 +1,14 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const port = 80;
 
 // Pug related
 app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
+
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
 
 // Endpoints
 app.get("/", (req, res) => {
@@ -12,6 +17,10 @@ app.get("/", (req, res) => {
 
 app.get("/register", (req, res) => {
   res.render("register");
+});
+
+app.post("/register", (req, res) => {
+  res.json(req.body);
 });
 
 app.get("/login", (req, res) => {
