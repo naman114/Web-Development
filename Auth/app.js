@@ -1,11 +1,10 @@
 const express = require("express");
-const path = require("path");
+const mongoose = require("mongoose");
 const app = express();
 const port = 80;
 
 // Pug related
 app.set("view engine", "pug");
-app.set("views", path.join(__dirname, "views"));
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
