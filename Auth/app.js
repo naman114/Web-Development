@@ -1,5 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const sessions = require("client-sessions");
+const secrets = require("./secrets");
+
 const app = express();
 const port = 80;
 
@@ -8,6 +11,14 @@ app.set("view engine", "pug");
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  sessions({
+    cookieName: "session",
+    secret: secrets.cookieSecret,
+    duration: 1 * 60 * 1000,
+  })
+);
 
 // Mongoose
 mongoose.connect("mongodb://localhost:27017/users");
@@ -61,12 +72,27 @@ app.post("/login", (req, res) => {
       });
     }
 
+    req.session.userId = user._id;
     return res.redirect("dashboard");
   });
 });
 
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard");
+app.get("/dashboard", (req, res, next) => {
+  if (req.session === undefined || req.session.userId === undefined) {
+    return res.redirect("login");
+  }
+
+  User.findById(req.session.userId, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return res.redirect("login");
+    }
+
+    res.render("dashboard");
+  });
 });
 
 app.listen(port, () => {
