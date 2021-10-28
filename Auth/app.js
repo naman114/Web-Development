@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const sessions = require("client-sessions");
 const bcrypt = require("bcryptjs");
+const csurf = require("csurf");
+const helmet = require("helmet");
 const secrets = require("./secrets");
 
 const app = express();
@@ -18,6 +20,9 @@ app.use(
     cookieName: "session",
     secret: secrets.cookieSecret,
     duration: 1 * 60 * 1000,
+    httpOnly: true, // Do not allow client side js to access this encrypted cookie
+    secure: true, // only set cookies if the website is running SSL
+    ephemeral: true, // destroy the cookies when the browser closes
   })
 );
 
@@ -48,10 +53,16 @@ app.use((req, res, next) => {
 
 function loginRequired(req, res, next) {
   if (!req.user) {
-    return res.redirect("login");
+    return res.redirect("login", { csrfToken: req.csrfToken() });
   }
   next();
 }
+
+// This middleware handles the csrf token equality
+app.use(csurf());
+
+// Sets up http headers on the site and secures them. Prevents click-jacking etc.
+app.use(helmet());
 
 // Mongoose
 mongoose.connect("mongodb://localhost:27017/users");
@@ -72,7 +83,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", { csrfToken: req.csrfToken() });
 });
 
 app.post("/register", (req, res) => {
@@ -89,15 +100,18 @@ app.post("/register", (req, res) => {
         error = "Email is already taken, try with another one";
       }
 
-      return res.render("register", { error: error });
+      return res.render("register", {
+        error: error,
+        csrfToken: req.csrfToken(),
+      });
     }
 
-    return res.redirect("login");
+    return res.redirect("login", { csrfToken: req.csrfToken() });
   });
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", { csrfToken: req.csrfToken() });
 });
 
 app.post("/login", (req, res) => {
@@ -105,6 +119,7 @@ app.post("/login", (req, res) => {
     if (err || !user || !bcrypt.compareSync(req.body.password, user.password)) {
       return res.render("login", {
         error: "Incorrect email/password",
+        csrfToken: req.csrfToken(),
       });
     }
 
