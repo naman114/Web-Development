@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const sessions = require("client-sessions");
+const bcrypt = require("bcryptjs");
 const secrets = require("./secrets");
 
 const app = express();
@@ -19,6 +20,38 @@ app.use(
     duration: 1 * 60 * 1000,
   })
 );
+
+// Smart user middleware (dashboard refactor)
+app.use((req, res, next) => {
+  if (req.session === undefined || req.session.userId === undefined) {
+    return next();
+  }
+
+  User.findById(req.session.userId, (err, user) => {
+    if (err) {
+      return next(err);
+    }
+
+    if (!user) {
+      return next();
+    }
+
+    // Since the user will be shared with html templates, remove the password to prevent leaking it
+    user.password = undefined;
+
+    req.user = user; // For a logged in user just check if req.user is not undefined
+    res.locals.user = user; // To access user variable in the html templates
+
+    next();
+  });
+});
+
+function loginRequired(req, res, next) {
+  if (!req.user) {
+    return res.redirect("login");
+  }
+  next();
+}
 
 // Mongoose
 mongoose.connect("mongodb://localhost:27017/users");
@@ -43,6 +76,9 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
+  let hash = bcrypt.hashSync(req.body.password, 14);
+  req.body.password = hash;
+
   let user = new User(req.body);
 
   user.save((err) => {
@@ -66,7 +102,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   User.findOne({ email: req.body.email }, (err, user) => {
-    if (err || !user || req.body.password !== user.password) {
+    if (err || !user || !bcrypt.compareSync(req.body.password, user.password)) {
       return res.render("login", {
         error: "Incorrect email/password",
       });
@@ -77,22 +113,8 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.get("/dashboard", (req, res, next) => {
-  if (req.session === undefined || req.session.userId === undefined) {
-    return res.redirect("login");
-  }
-
-  User.findById(req.session.userId, (err, user) => {
-    if (err) {
-      return next(err);
-    }
-
-    if (!user) {
-      return res.redirect("login");
-    }
-
-    res.render("dashboard");
-  });
+app.get("/dashboard", loginRequired, (req, res, next) => {
+  res.render("dashboard", { userstring: JSON.stringify(req.user) });
 });
 
 app.listen(port, () => {
