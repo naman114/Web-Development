@@ -11,16 +11,47 @@ class CartItem extends React.Component {
       qty: 1,
       img: "",
     };
+    // this.testing();
   }
 
   increaseQuantity = () => {
-    console.log("this", this);
-    console.log("this.state", this.state);
+    this.setState((prevState) => {
+      return {
+        qty: prevState.qty + 1,
+      };
+    });
   };
+
+  decreaseQuantity = () => {
+    const { qty } = this.state;
+    if (qty === 0) return;
+
+    this.setState((prevState) => {
+      return {
+        qty: prevState.qty - 1,
+      };
+    });
+  };
+
+  /*   testing() {
+    // Promise to simulate an API call
+    const promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("done");
+      }, 5000);
+    });
+
+    promise.then(() => {
+      this.setState({ qty: this.state.qty + 1 });
+      this.setState({ qty: this.state.qty + 1 });
+      this.setState({ qty: this.state.qty + 1 });
+      console.log("state", this.state);
+    });
+  } */
 
   // Should return JSX
   render() {
-    const { price, title, qty } = this.state;
+    const { price, title, qty, img } = this.state;
     return (
       <div className="cart-item">
         <div className="left-block">
@@ -36,7 +67,11 @@ class CartItem extends React.Component {
               className="action-icons"
               onClick={this.increaseQuantity}
             />
-            <Icon icon="akar-icons:circle-minus" className="action-icons" />
+            <Icon
+              icon="akar-icons:circle-minus"
+              className="action-icons"
+              onClick={this.decreaseQuantity}
+            />
             <Icon icon="carbon:delete" className="action-icons" />
           </div>
         </div>
