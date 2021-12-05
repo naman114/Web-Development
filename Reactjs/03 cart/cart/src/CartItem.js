@@ -1,9 +1,8 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import "./index.css";
 
 class CartItem extends React.Component {
-  constructor() {
+  /* constructor() {
     super();
     this.state = {
       price: 9999,
@@ -12,7 +11,7 @@ class CartItem extends React.Component {
       img: "",
     };
     // this.testing();
-  }
+  } */
 
   increaseQuantity = () => {
     this.setState((prevState) => {
@@ -51,7 +50,8 @@ class CartItem extends React.Component {
 
   // Should return JSX
   render() {
-    const { price, title, qty, img } = this.state;
+    console.log("this.props", this.props);
+    const { price, title, qty, img } = this.props.product;
     return (
       <div className="cart-item">
         <div className="left-block">
