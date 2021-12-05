@@ -2,17 +2,6 @@ import React from "react";
 import { Icon } from "@iconify/react";
 
 class CartItem extends React.Component {
-  /* constructor() {
-    super();
-    this.state = {
-      price: 9999,
-      title: "Phone",
-      qty: 1,
-      img: "",
-    };
-    // this.testing();
-  } */
-
   increaseQuantity = () => {
     this.setState((prevState) => {
       return {
@@ -31,27 +20,11 @@ class CartItem extends React.Component {
       };
     });
   };
-
-  /*   testing() {
-    // Promise to simulate an API call
-    const promise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve("done");
-      }, 5000);
-    });
-
-    promise.then(() => {
-      this.setState({ qty: this.state.qty + 1 });
-      this.setState({ qty: this.state.qty + 1 });
-      this.setState({ qty: this.state.qty + 1 });
-      console.log("state", this.state);
-    });
-  } */
-
   // Should return JSX
   render() {
-    console.log("this.props", this.props);
-    const { price, title, qty, img } = this.props.product;
+    const { price, title, qty, img, id } = this.props.product;
+    const { product, onIncreaseQuantity, onDecreaseQuantity, onDeleteProduct } =
+      this.props;
     return (
       <div className="cart-item">
         <div className="left-block">
@@ -65,14 +38,18 @@ class CartItem extends React.Component {
             <Icon
               icon="akar-icons:circle-plus"
               className="action-icons"
-              onClick={this.increaseQuantity}
+              onClick={() => onIncreaseQuantity(product)}
             />
             <Icon
               icon="akar-icons:circle-minus"
               className="action-icons"
-              onClick={this.decreaseQuantity}
+              onClick={() => onDecreaseQuantity(product)}
             />
-            <Icon icon="carbon:delete" className="action-icons" />
+            <Icon
+              icon="carbon:delete"
+              className="action-icons"
+              onClick={() => onDeleteProduct(id)}
+            />
           </div>
         </div>
       </div>
