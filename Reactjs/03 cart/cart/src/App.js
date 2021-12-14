@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 
 class App extends React.Component {
   constructor() {
+    console.log("CONSTRUCTOR");
     super();
     this.state = {
       products: [
@@ -31,6 +32,27 @@ class App extends React.Component {
       ],
     };
   }
+
+  componentDidMount() {
+    // Make API calls, attach event listeners, start timers etc
+    console.log("componentDidMount");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    //  Called immediately after updating occurs. Not called for the initial render.
+    console.log("componentDidUpdate");
+    console.log("prevProps", prevProps);
+    console.log("prevState", prevState);
+    console.log("props", this.props);
+    console.log("state", this.state);
+
+    // setState without condition here will cause infinite loop
+  }
+
+  componentWillUnmount() {
+    // Just before component is unmounted from DOM. Used for cleanup of eventlistener, stop some timers, cancel pending API calls
+  }
+
   handleIncreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
@@ -75,6 +97,7 @@ class App extends React.Component {
     return cartTotal;
   }
   render() {
+    console.log("RENDER");
     const { products } = this.state;
     return (
       <div
