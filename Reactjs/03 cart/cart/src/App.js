@@ -1,41 +1,40 @@
 import React from "react";
 import Cart from "./Cart";
 import Navbar from "./Navbar";
+import { myFirebaseApp } from "./index";
+import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 
 class App extends React.Component {
   constructor() {
     console.log("CONSTRUCTOR");
     super();
     this.state = {
-      products: [
-        {
-          price: 9999,
-          title: "Phone",
-          qty: 1,
-          img: "https://images.unsplash.com/photo-1545063328-c8e3faffa16f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1782&q=80",
-          id: 1,
-        },
-        {
-          price: 199,
-          title: "Wallet",
-          qty: 11,
-          img: "https://images.unsplash.com/photo-1612023395494-1c4050b68647?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-          id: 2,
-        },
-        {
-          price: 999,
-          title: "Watch",
-          qty: 10,
-          img: "https://images.unsplash.com/photo-1549972574-8e3e1ed6a347?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
-          id: 3,
-        },
-      ],
+      products: [],
+      loading: true,
     };
   }
 
   componentDidMount() {
     // Make API calls, attach event listeners, start timers etc
     console.log("componentDidMount");
+
+    const db = getFirestore(myFirebaseApp);
+    const productsCol = collection(db, "products");
+
+    getDocs(productsCol).then((productSnapshot) => {
+      console.log(productSnapshot);
+      productSnapshot.docs.map((doc) => {
+        console.log(doc.data());
+      });
+
+      const products = productSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        data["id"] = doc.id;
+        return data;
+      });
+
+      this.setState({ products, loading: false });
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -98,7 +97,7 @@ class App extends React.Component {
   }
   render() {
     console.log("RENDER");
-    const { products } = this.state;
+    const { products, loading } = this.state;
     return (
       <div
         className="App"
@@ -115,6 +114,7 @@ class App extends React.Component {
           onDecreaseQuantity={this.handleDecreaseQuantity}
           onDeleteProduct={this.handleDeleteProduct}
         />
+        {loading && <h1>Loading Products...</h1>}
         <div
           style={{
             padding: 10,
@@ -129,3 +129,27 @@ class App extends React.Component {
 }
 
 export default App;
+
+/*
+{
+          price: 9999,
+          title: "Phone",
+          qty: 1,
+          img: "https://images.unsplash.com/photo-1545063328-c8e3faffa16f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1782&q=80",
+          id: 1,
+        },
+        {
+          price: 199,
+          title: "Wallet",
+          qty: 11,
+          img: "https://images.unsplash.com/photo-1612023395494-1c4050b68647?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
+          id: 2,
+        },
+        {
+          price: 999,
+          title: "Watch",
+          qty: 10,
+          img: "https://images.unsplash.com/photo-1549972574-8e3e1ed6a347?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80",
+          id: 3,
+        },
+*/
