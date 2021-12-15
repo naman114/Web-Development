@@ -2,7 +2,16 @@ import React from "react";
 import Cart from "./Cart";
 import Navbar from "./Navbar";
 import { myFirebaseApp } from "./index";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 class App extends React.Component {
   constructor() {
@@ -12,16 +21,15 @@ class App extends React.Component {
       products: [],
       loading: true,
     };
+    this.db = getFirestore(myFirebaseApp);
+    this.productsCol = collection(this.db, "products");
   }
 
   componentDidMount() {
     // Make API calls, attach event listeners, start timers etc
     console.log("componentDidMount");
 
-    const db = getFirestore(myFirebaseApp);
-    const productsCol = collection(db, "products");
-
-    getDocs(productsCol).then((productSnapshot) => {
+    /* getDocs(productsCol).then((productSnapshot) => {
       console.log(productSnapshot);
       productSnapshot.docs.map((doc) => {
         console.log(doc.data());
@@ -34,7 +42,22 @@ class App extends React.Component {
       });
 
       this.setState({ products, loading: false });
+    }); */
+
+    const foo = onSnapshot(this.productsCol, (productSnapshot) => {
+      productSnapshot.docs.map((doc) => {
+        console.log("Current data: ", doc.data());
+      });
+
+      const products = productSnapshot.docs.map((doc) => {
+        const data = doc.data();
+        data["id"] = doc.id;
+        return data;
+      });
+
+      this.setState({ products, loading: false });
     });
+    console.log({ foo });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -55,29 +78,61 @@ class App extends React.Component {
   handleIncreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
-    products[index].qty++;
 
-    this.setState({
-      products,
-    });
+    // We don't need to increment the qty locally. Doing that on firebase is sufficient
+    // products[index].qty++;
+
+    // this.setState({
+    //   products,
+    // });
+
+    const docRef = doc(this.db, "products", products[index].id);
+
+    updateDoc(docRef, { qty: products[index].qty + 1 })
+      .then(() => {
+        console.log("Document updated successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   handleDecreaseQuantity = (product) => {
     const { products } = this.state;
     const index = products.indexOf(product);
 
     if (products[index].qty === 0) return;
-    products[index].qty--;
+    // products[index].qty--;
 
-    this.setState({
-      products,
-    });
+    // this.setState({
+    //   products,
+    // });
+
+    const docRef = doc(this.db, "products", products[index].id);
+
+    updateDoc(docRef, { qty: products[index].qty - 1 })
+      .then(() => {
+        console.log("Document updated successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   handleDeleteProduct = (id) => {
-    const { products } = this.state;
+    // const { products } = this.state;
 
-    const items = products.filter((item) => item.id !== id);
+    // const items = products.filter((item) => item.id !== id);
 
-    this.setState({ products: items });
+    // this.setState({ products: items });
+
+    const docRef = doc(this.db, "products", id);
+
+    deleteDoc(docRef)
+      .then(() => {
+        console.log("Document deleted successfully");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   getCartCount() {
     const { products } = this.state;
@@ -94,6 +149,22 @@ class App extends React.Component {
       cartTotal += product.qty * product.price;
     });
     return cartTotal;
+  }
+  addProduct() {
+    // Binding was required since this function is not an arrow function
+    addDoc(this.productsCol, {
+      img: "",
+      price: 900,
+      qty: 12,
+      title: "Washing machine",
+    })
+      .then((docRef) => {
+        // The above data will be converted into a document and added to our products collection
+        console.log(docRef);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
   render() {
     console.log("RENDER");
@@ -115,6 +186,7 @@ class App extends React.Component {
           onDeleteProduct={this.handleDeleteProduct}
         />
         {loading && <h1>Loading Products...</h1>}
+        <button onClick={this.addProduct.bind(this)}>Add Product</button>
         <div
           style={{
             padding: 10,
