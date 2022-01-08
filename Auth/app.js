@@ -53,7 +53,7 @@ app.use((req, res, next) => {
 
 function loginRequired(req, res, next) {
   if (!req.user) {
-    return res.redirect("login", { csrfToken: req.csrfToken() });
+    return res.redirect("login");
   }
   next();
 }
@@ -106,7 +106,7 @@ app.post("/register", (req, res) => {
       });
     }
 
-    return res.redirect("login", { csrfToken: req.csrfToken() });
+    return res.render("login", { csrfToken: req.csrfToken() });
   });
 });
 
