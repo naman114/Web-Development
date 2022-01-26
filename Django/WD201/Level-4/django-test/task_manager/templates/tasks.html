@@ -1,0 +1,17 @@
+<h1>Pending tasks</h1>
+
+{% if tasks %}
+<p>Hello! Your task is {{tasks}}</p>
+{% else %}
+<p>No tasks to do!</p>
+{% endif %}
+
+<h1>Request</h1>
+{{request}}
+
+<h1>GET Query Parameters</h1>
+{{request.GET}}
+
+<h1>Loop over tasks</h1>
+{% for task in tasks %} {{task}} <br />
+{% endfor %}

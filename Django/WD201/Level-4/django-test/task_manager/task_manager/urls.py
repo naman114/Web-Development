@@ -19,13 +19,24 @@ from django.urls import path
 # To send an HttpResponse for a request
 from django.http import HttpResponse
 
+# Shortcut to render a file
+from django.shortcuts import render
+
 
 def tasks_view(request):
     # Sending status code
     # return HttpResponse(status=401)
 
     # content is a positional parameter while status is a keyword based parameter
-    return HttpResponse("<h1>Hello World 200!</h1>", status=200)
+    # return HttpResponse("<h1>Hello World 200!</h1>", status=200)
+
+    # render static page
+    # return render(request, "tasks.html")
+
+    # render page with data using the 'context' dictionary
+    return render(
+        request, "tasks.html", {"tasks": ["water the plants", "eat dinner", "workout"]}
+    )
 
 
 urlpatterns = [path("admin/", admin.site.urls), path("tasks/", tasks_view)]
