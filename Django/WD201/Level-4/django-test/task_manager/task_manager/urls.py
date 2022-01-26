@@ -17,10 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 # To send an HttpResponse for a request
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 # Shortcut to render a file
 from django.shortcuts import render
+
+active_tasks = []
 
 
 def tasks_view(request):
@@ -34,9 +36,23 @@ def tasks_view(request):
     # return render(request, "tasks.html")
 
     # render page with data using the 'context' dictionary
-    return render(
-        request, "tasks.html", {"tasks": ["water the plants", "eat dinner", "workout"]}
-    )
+    return render(request, "tasks.html", {"tasks": active_tasks})
 
 
-urlpatterns = [path("admin/", admin.site.urls), path("tasks/", tasks_view)]
+def add_task_view(request):
+    task_to_add = request.GET.get("task-name")
+    active_tasks.append(task_to_add)
+    return HttpResponseRedirect("/tasks")
+
+
+def delete_task_view(request, index):
+    del active_tasks[index - 1]
+    return HttpResponseRedirect("/tasks")
+
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("tasks/", tasks_view),
+    path("add-task/", add_task_view),
+    path("delete-task/<int:index>", delete_task_view),
+]
