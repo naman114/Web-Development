@@ -8,7 +8,7 @@ completed_tasks = []
 
 # Pending tasks
 def tasks_view(request):
-    active_tasks = Task.objects.all()
+    active_tasks = Task.objects.filter(deleted=False)
     search_term = request.GET.get("search")
     if search_term:
         active_tasks = active_tasks.filter(title__icontains=search_term)
@@ -39,7 +39,7 @@ def add_task_view(request):
 
 # Delete a task
 def delete_task_view(request, index):
-    Task.objects.filter(id=index).delete()
+    Task.objects.filter(id=index).update(deleted=True)
     return HttpResponseRedirect("/tasks")
 
 
