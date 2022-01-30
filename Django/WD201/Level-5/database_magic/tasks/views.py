@@ -39,8 +39,7 @@ def add_task_view(request):
 
 # Delete a task
 def delete_task_view(request, index):
-    if index <= len(active_tasks):
-        del active_tasks[index - 1]
+    Task.objects.filter(id=index).delete()
     return HttpResponseRedirect("/tasks")
 
 
