@@ -1,11 +1,17 @@
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+from tasks.models import Task
 
 active_tasks = []
 completed_tasks = []
 
 # Pending tasks
 def tasks_view(request):
+    active_tasks = Task.objects.all()
+    search_term = request.GET.get("search")
+    if search_term:
+        active_tasks = active_tasks.filter(title__icontains=search_term)
     return render(request, "pending_tasks.html", {"tasks": active_tasks})
 
 
@@ -26,7 +32,8 @@ def all_tasks_view(request):
 # Add a task
 def add_task_view(request):
     task_to_add = request.GET.get("task")
-    active_tasks.append(task_to_add)
+    # Instead of appending to the list, we save our task to the db
+    Task(title=task_to_add).save()
     return HttpResponseRedirect("/tasks")
 
 

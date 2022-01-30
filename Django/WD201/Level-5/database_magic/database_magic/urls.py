@@ -17,14 +17,13 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-
 from tasks.views import (
-    tasks_view,
-    completed_view,
-    all_tasks_view,
     add_task_view,
+    all_tasks_view,
     complete_task_view,
+    completed_view,
     delete_task_view,
+    tasks_view,
 )
 
 urlpatterns = [
