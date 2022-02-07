@@ -68,6 +68,17 @@ def all_tasks_view(request):
     )
 
 
+class CreateTaskView(View):
+    def get(self, request):
+        return render(request, "task_create.html")
+
+    def post(self, request):
+        # Getting data from request body
+        task_to_add = request.POST.get("task")
+        Task(title=task_to_add).save()
+        return HttpResponseRedirect("/tasks")
+
+
 # Add a task
 def add_task_view(request):
     task_to_add = request.GET.get("task")
