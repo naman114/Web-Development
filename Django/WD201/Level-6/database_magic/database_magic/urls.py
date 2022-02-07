@@ -28,6 +28,7 @@ from tasks.views import (
     GenericTaskView,
     CreateTaskView,
     GenericTaskCreateView,
+    GenericTaskUpdateView,
 )
 
 # as_view() method converts the CBV into a callable view
@@ -39,6 +40,7 @@ urlpatterns = [
     path("all_tasks/", all_tasks_view),
     path("add-task/", add_task_view),
     path("create-task/", GenericTaskCreateView.as_view()),
+    path("update-task/<pk>", GenericTaskUpdateView.as_view()),
     path("complete_task/<int:index>/", complete_task_view),
     path("delete-task/<int:index>/", delete_task_view),
 ]

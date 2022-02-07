@@ -5,7 +5,7 @@ from tasks.models import Task
 # Base class we'll be inheriting from to create class based views
 from django.views import View
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 
@@ -106,6 +106,14 @@ def add_task_view(request):
     task_to_add = request.GET.get("task")
     Task(title=task_to_add).save()
     return HttpResponseRedirect("/tasks")
+
+
+################################ Update a task ##########################################
+class GenericTaskUpdateView(UpdateView):
+    model = Task
+    form_class = TaskCreateForm
+    template_name = "task_update.html"
+    success_url = "/tasks"
 
 
 ################################ Delete a task ##########################################

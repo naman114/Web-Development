@@ -32,7 +32,8 @@
       <td class="table table-item">{{task.title}} - {{ task.created_date }}</td>
       <td class="table table-item">
         <a href="/delete-task/{{ task.id }}">Delete task</a> <br />
-        <a href="/complete_task/{{ task.id }}">Mark as complete</a>
+        <a href="/complete_task/{{ task.id }}">Mark as complete</a> <br />
+        <a href="/update-task/{{ task.id }}">Update Task</a>
       </td>
     </tr>
     {% endfor %}
