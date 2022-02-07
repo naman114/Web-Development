@@ -6,8 +6,11 @@ from tasks.models import Task
 from django.views import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView
+from django.forms import ModelForm
+from django.core.exceptions import ValidationError
 
 
+################################ Pending tasks ##########################################
 class GenericTaskView(ListView):
     queryset = Task.objects.filter(deleted=False, completed=False)
     template_name = "pending_tasks.html"
@@ -38,7 +41,6 @@ class TaskView(View):
         pass
 
 
-# Pending tasks
 def tasks_view(request):
     search_term = request.GET.get("search")
     return render(
@@ -46,7 +48,7 @@ def tasks_view(request):
     )
 
 
-# Completed tasks
+################################ Completed tasks ##########################################
 def completed_view(request):
     search_term = request.GET.get("search")
     return render(
@@ -54,7 +56,7 @@ def completed_view(request):
     )
 
 
-# All tasks
+################################ All tasks ##########################################
 def all_tasks_view(request):
     search_term = request.GET.get("search")
     return render(
@@ -67,9 +69,24 @@ def all_tasks_view(request):
     )
 
 
+################################ Add a task ##########################################
+class TaskCreateForm(ModelForm):
+    def clean_title(self):
+        # cleaned_data is django's representation of all data collected from the form
+        title = self.cleaned_data["title"]
+        if len(title) < 10:
+            raise ValidationError("Error: Length must be 10 characters")
+        return title.upper()
+
+    class Meta:
+        model = Task
+        fields = ("title", "description", "completed")
+
+
 class GenericTaskCreateView(CreateView):
-    model = Task
-    fields = ("title", "description", "completed")
+    # model = Task
+    # fields = ("title", "description", "completed")
+    form_class = TaskCreateForm  # We created a form manually and passed to to this view
     template_name = "task_create.html"
     success_url = "/tasks"
 
@@ -85,26 +102,25 @@ class CreateTaskView(View):
         return HttpResponseRedirect("/tasks")
 
 
-# Add a task
 def add_task_view(request):
     task_to_add = request.GET.get("task")
     Task(title=task_to_add).save()
     return HttpResponseRedirect("/tasks")
 
 
-# Delete a task
+################################ Delete a task ##########################################
 def delete_task_view(request, index):
     Task.objects.filter(id=index).update(deleted=True)
     return HttpResponseRedirect("/tasks")
 
 
-# Mark task as complete
+################################ Mark task as complete ##########################################
 def complete_task_view(request, index):
     Task.objects.filter(id=index).update(completed=True)
     return HttpResponseRedirect("/tasks")
 
 
-# Helper function to return pending tasks and completed tasks
+################################ Helper function to return pending tasks and completed tasks ##########################################
 def get_tasks(task_type, search_term):
     tasks = None
     if task_type == "pending":
