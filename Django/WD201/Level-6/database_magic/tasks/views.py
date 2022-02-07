@@ -1,5 +1,3 @@
-from re import search
-from urllib import request
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from tasks.models import Task
@@ -7,6 +5,7 @@ from tasks.models import Task
 # Base class we'll be inheriting from to create class based views
 from django.views import View
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 
 
 class GenericTaskView(ListView):
@@ -66,6 +65,13 @@ def all_tasks_view(request):
             "completed_tasks": get_tasks("completed", search_term),
         },
     )
+
+
+class GenericTaskCreateView(CreateView):
+    model = Task
+    fields = ("title", "description", "completed")
+    template_name = "task_create.html"
+    success_url = "/tasks"
 
 
 class CreateTaskView(View):
