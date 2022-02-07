@@ -8,6 +8,7 @@ from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
+from django.views.generic.detail import DetailView
 
 
 ################################ Pending tasks ##########################################
@@ -67,6 +68,12 @@ def all_tasks_view(request):
             "completed_tasks": get_tasks("completed", search_term),
         },
     )
+
+
+################################ Task Detail View ##########################################
+class GenericTaskDetailView(DetailView):
+    model = Task
+    template_name = "task_detail.html"
 
 
 ################################ Add a task ##########################################
