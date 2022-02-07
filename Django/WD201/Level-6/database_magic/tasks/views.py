@@ -5,7 +5,7 @@ from tasks.models import Task
 # Base class we'll be inheriting from to create class based views
 from django.views import View
 from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.views.generic.detail import DetailView
@@ -124,6 +124,12 @@ class GenericTaskUpdateView(UpdateView):
 
 
 ################################ Delete a task ##########################################
+class GenericTaskDeleteView(DeleteView):
+    model = Task
+    template_name = "task_delete.html"
+    success_url = "/tasks"
+
+
 def delete_task_view(request, index):
     Task.objects.filter(id=index).update(deleted=True)
     return HttpResponseRedirect("/tasks")
