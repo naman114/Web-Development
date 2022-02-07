@@ -25,11 +25,14 @@ from tasks.views import (
     delete_task_view,
     tasks_view,
     TaskView,
+    GenericTaskView,
 )
+
+# as_view() method converts the CBV into a callable view
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("tasks/", TaskView.as_view()),
+    path("tasks/", GenericTaskView.as_view()),
     path("completed_tasks/", completed_view),
     path("all_tasks/", all_tasks_view),
     path("add-task/", add_task_view),

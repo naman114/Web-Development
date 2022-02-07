@@ -1,8 +1,29 @@
+from re import search
+from urllib import request
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views import View
-
 from tasks.models import Task
+
+# Base class we'll be inheriting from to create class based views
+from django.views import View
+from django.views.generic.list import ListView
+
+
+class GenericTaskView(ListView):
+    queryset = Task.objects.filter(deleted=False, completed=False)
+    template_name = "pending_tasks.html"
+    context_object_name = "tasks"
+    paginate_by = 5
+
+    def get_queryset(self):
+        #  The request object will be inside self object. It's not separately available this time
+        search_term = self.request.GET.get("search")
+        tasks = Task.objects.filter(deleted=False, completed=False)
+
+        if search_term:
+            tasks = tasks.filter(title__icontains=search_term)
+
+        return tasks
 
 
 class TaskView(View):
@@ -13,7 +34,7 @@ class TaskView(View):
             request, "pending_tasks.html", {"tasks": get_tasks("pending", search_term)}
         )
 
-    # The get method is called for get requests
+    # The post method is called for post requests
     def post(self, request):
         pass
 

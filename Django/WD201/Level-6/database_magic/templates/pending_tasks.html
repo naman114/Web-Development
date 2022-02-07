@@ -37,6 +37,12 @@
     </tr>
     {% endfor %}
   </table>
+
+  {% for page in paginator.page_range %}
+  <li>
+    <a href="?page={{ page }}&search={{request.GET.search}}">{{ page }}</a>
+  </li>
+  {% endfor %}
 </div>
 
 <style>
