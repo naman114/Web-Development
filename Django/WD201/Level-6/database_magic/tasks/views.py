@@ -9,6 +9,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from django.views.generic.detail import DetailView
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.views import LoginView
 
 
 ################################ Pending tasks ##########################################
@@ -167,3 +169,14 @@ def session_storage_view(request):
     request.session["total_views"] = total_views + 1
     # Render it back to us
     return HttpResponse(f"Total views is {total_views}")
+
+
+################################ User Sign Up ##########################################
+class UserCreateView(CreateView):
+    form_class = UserCreationForm
+    template_name = "user_create.html"
+    success_url = "/user/login"
+
+
+class UserLoginView(LoginView):
+    template_name = "user_login.html"

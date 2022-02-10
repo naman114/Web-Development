@@ -32,10 +32,12 @@ from tasks.views import (
     GenericTaskDetailView,
     GenericTaskDeleteView,
     session_storage_view,
+    UserCreateView,
+    UserLoginView,
 )
+from django.contrib.auth.views import LogoutView
 
 # as_view() method converts the CBV into a callable view
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("tasks/", GenericTaskView.as_view()),
@@ -49,4 +51,8 @@ urlpatterns = [
     path("delete-task/<pk>", GenericTaskDeleteView.as_view()),
     # path("delete-task/<int:index>/", delete_task_view),
     path("sessiontest", session_storage_view),
+    path("user/signup", UserCreateView.as_view()),
+    path("user/login", UserLoginView.as_view()),
+    path("user/login", UserLoginView.as_view()),
+    path("user/logout", LogoutView.as_view()),
 ]
