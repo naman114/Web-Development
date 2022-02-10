@@ -11,10 +11,19 @@ from django.core.exceptions import ValidationError
 from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class AuthorizedTaskManager(LoginRequiredMixin):
+    def get_queryset(self):
+        tasks = Task.objects.filter(
+            deleted=False, completed=False, user=self.request.user
+        )
+        return tasks
 
 
 ################################ Pending tasks ##########################################
-class GenericTaskView(ListView):
+class GenericTaskView(LoginRequiredMixin, ListView):
     queryset = Task.objects.filter(deleted=False, completed=False)
     template_name = "pending_tasks.html"
     context_object_name = "tasks"
@@ -22,8 +31,11 @@ class GenericTaskView(ListView):
 
     def get_queryset(self):
         #  The request object will be inside self object. It's not separately available this time
+        # Fetch only those tasks created by the logged in user
         search_term = self.request.GET.get("search")
-        tasks = Task.objects.filter(deleted=False, completed=False)
+        tasks = Task.objects.filter(
+            deleted=False, completed=False, user=self.request.user
+        )
 
         if search_term:
             tasks = tasks.filter(title__icontains=search_term)
@@ -73,7 +85,7 @@ def all_tasks_view(request):
 
 
 ################################ Task Detail View ##########################################
-class GenericTaskDetailView(DetailView):
+class GenericTaskDetailView(AuthorizedTaskManager, DetailView):
     model = Task
     template_name = "task_detail.html"
 
@@ -92,12 +104,20 @@ class TaskCreateForm(ModelForm):
         fields = ("title", "description", "completed")
 
 
-class GenericTaskCreateView(CreateView):
+class GenericTaskCreateView(LoginRequiredMixin, CreateView):
     # model = Task
     # fields = ("title", "description", "completed")
     form_class = TaskCreateForm  # We created a form manually and passed to to this view
     template_name = "task_create.html"
     success_url = "/tasks"
+
+    # Override the following method present in the base
+    def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+        self.object = form.save()
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class CreateTaskView(View):
@@ -118,7 +138,7 @@ def add_task_view(request):
 
 
 ################################ Update a task ##########################################
-class GenericTaskUpdateView(UpdateView):
+class GenericTaskUpdateView(AuthorizedTaskManager, UpdateView):
     model = Task
     form_class = TaskCreateForm
     template_name = "task_update.html"
@@ -126,7 +146,7 @@ class GenericTaskUpdateView(UpdateView):
 
 
 ################################ Delete a task ##########################################
-class GenericTaskDeleteView(DeleteView):
+class GenericTaskDeleteView(AuthorizedTaskManager, DeleteView):
     model = Task
     template_name = "task_delete.html"
     success_url = "/tasks"
@@ -168,7 +188,9 @@ def session_storage_view(request):
     # Store the value back in the session
     request.session["total_views"] = total_views + 1
     # Render it back to us
-    return HttpResponse(f"Total views is {total_views}")
+    return HttpResponse(
+        f"Total views is {total_views} and the user is {request.user} and are they authenticated? {request.user.is_authenticated}"
+    )
 
 
 ################################ User Sign Up ##########################################
