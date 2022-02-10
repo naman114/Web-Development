@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from tasks.models import Task
 
@@ -153,3 +153,17 @@ def get_tasks(task_type, search_term):
         tasks = tasks.filter(title__icontains=search_term)
 
     return tasks
+
+
+################################ Session Storage ##########################################
+def session_storage_view(request):
+    print(
+        request.session
+    )  # <django.contrib.sessions.backends.db.SessionStore object at 0x7f8fa8126d90> (It is a dict)
+
+    # Get the total views from the session
+    total_views = request.session.get("total_views", 0)
+    # Store the value back in the session
+    request.session["total_views"] = total_views + 1
+    # Render it back to us
+    return HttpResponse(f"Total views is {total_views}")
