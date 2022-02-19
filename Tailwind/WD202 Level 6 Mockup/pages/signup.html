@@ -24,8 +24,12 @@
                 name="username"
                 type="text"
                 required
-                class="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
               />
+              <p class="text-sm">
+                Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+                only.
+              </p>
             </div>
             <br />
             <div>
@@ -35,8 +39,23 @@
                 name="password"
                 type="password"
                 required
-                class="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
               />
+              <ul>
+                <li class="text-sm">
+                  Your password can't be too similar to your other personal
+                  information.
+                </li>
+                <li class="text-sm">
+                  Your password must contain at least 8 characters.
+                </li>
+                <li class="text-sm">
+                  Your password can't be a commonly used password.
+                </li>
+                <li class="text-sm">
+                  Your password can't be entirely numeric.
+                </li>
+              </ul>
             </div>
             <br />
             <div>
@@ -46,8 +65,18 @@
                 name="confirm-password"
                 type="password"
                 required
-                class="mt-1 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
               />
+              <ul class="errorlist">
+                <li class="text-sm">
+                  The password is too similar to the username.
+                </li>
+                <li class="text-sm">
+                  This password is too short. It must contain at least 8
+                  characters.
+                </li>
+                <li class="text-sm">This password is too common.</li>
+              </ul>
             </div>
           </div>
 
@@ -64,3 +93,9 @@
     </div>
   </body>
 </html>
+
+<style>
+  br {
+    display: none;
+  }
+</style>
