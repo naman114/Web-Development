@@ -18,11 +18,23 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
+# Django filters
+from django_filters.rest_framework import (
+    DjangoFilterBackend,
+    FilterSet,
+    CharFilter,
+    ChoiceFilter,
+)
+
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ("first_name", "last_name", "username")
+
+
+class TaskFilter(FilterSet):
+    title = CharFilter(lookup_expr="icontains")
 
 
 class TaskSerializer(ModelSerializer):
@@ -42,6 +54,10 @@ class TaskViewSet(ModelViewSet):
 
     # If the following conditions are true, the user has access to the api
     permission_classes = (IsAuthenticated,)
+
+    # Filter
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TaskFilter
 
     def get_queryset(self):
         return Task.objects.filter(user=self.request.user, deleted=False)
