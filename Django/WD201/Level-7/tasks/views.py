@@ -1,4 +1,5 @@
 from itertools import chain
+from queue import PriorityQueue
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.safestring import mark_safe
 from tasks.models import Task
@@ -36,58 +37,19 @@ class TaskProgressManager:
         return context
 
 
-def handlePriorityCascading(existing_priority, target_priority, user):
-    # Fetching user's pending tasks having the same priority as the task to be created
-    tasks_matching_priority = Task.objects.filter(
-        priority=target_priority,
-        user=user,
-        deleted=False,
-        completed=False,
-    )
+def handlePriorityCascading(new_priority, user):
+    # Fetching all pending tasks of the user
+    pending_tasks = Task.objects.filter(user=user, completed=False, deleted=False)
 
-    if tasks_matching_priority.exists():
-        # Fetching all pending tasks of the user
-        pending_tasks = Task.objects.filter(
-            user=user, completed=False, deleted=False
-        ).order_by("priority")
+    tasksToUpdate = []
 
-        # Case 1: When we want to decrease the priority of a task (move it up the list)
-        # The idea is to increase the priority by 1 of all tasks having priority in the range [target_priority, existing_priority - 1]
-        shift_priority_by = None
-        first_task_to_update = None
-        last_task_to_update = None
-        if existing_priority > target_priority:
-            first_task_to_update = target_priority
-            last_task_to_update = existing_priority - 1
-            shift_priority_by = 1
+    while pending_tasks.filter(priority=new_priority).exists():
+        taskToUpdate = pending_tasks.filter(priority=new_priority).first()
+        taskToUpdate.priority += 1
+        tasksToUpdate.append(taskToUpdate)
+        new_priority += 1
 
-        # Case 2: When we want to increase the priority of a task (move it down the list)
-        # The idea is to decrease the priority by 1 of all tasks having priority in the range [existing_priority + 1, target_priority]
-        elif existing_priority < target_priority:
-            first_task_to_update = existing_priority + 1
-            last_task_to_update = target_priority
-            shift_priority_by = -1
-
-        # Case 3: Creating a task
-        # The idea is to increase the priority by 1 of all tasks having priority in the range [target_priority, highest_priority]
-        else:
-            first_task_to_update = target_priority
-            last_task_to_update = pending_tasks.last().priority
-            shift_priority_by = 1
-
-        priority_pk_dict = {}
-        for task in pending_tasks:
-            priority_pk_dict[task.priority] = task.pk
-
-        tasksToUpdate = []
-
-        for task_to_update in range(first_task_to_update, last_task_to_update + 1):
-            if task_to_update in priority_pk_dict.keys():
-                taskToUpdate = Task.objects.get(pk=priority_pk_dict[task_to_update])
-                taskToUpdate.priority += shift_priority_by
-                tasksToUpdate.append(taskToUpdate)
-
-        Task.objects.bulk_update(tasksToUpdate, ["priority"])
+    Task.objects.bulk_update(tasksToUpdate, ["priority"])
 
 
 ################################ Pending tasks ##########################################
@@ -199,9 +161,9 @@ class GenericTaskCreateView(LoginRequiredMixin, CreateView):
     success_url = "/tasks"
 
     def form_valid(self, form):
-        priority = form.cleaned_data["priority"]
+        new_priority = form.cleaned_data["priority"]
 
-        handlePriorityCascading(priority, priority, self.request.user)
+        handlePriorityCascading(new_priority, self.request.user)
 
         self.object = form.save()
         self.object.user = self.request.user
@@ -217,10 +179,9 @@ class GenericTaskUpdateView(AuthorizedTaskManager, UpdateView):
     success_url = "/tasks"
 
     def form_valid(self, form):
-        existing_priority = Task.objects.get(pk=self.object.pk).priority
-        target_priority = form.cleaned_data["priority"]
+        new_priority = form.cleaned_data["priority"]
 
-        handlePriorityCascading(existing_priority, target_priority, self.request.user)
+        handlePriorityCascading(new_priority, self.request.user)
 
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
