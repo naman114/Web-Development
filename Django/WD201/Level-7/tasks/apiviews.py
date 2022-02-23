@@ -13,13 +13,23 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 
+# Modelviewset is a bunch of views combined together
+# It implements all CRUD ops based on the model
+from rest_framework.viewsets import ModelViewSet
 
+# Creating a generic class
 class TaskSerializer(ModelSerializer):
     class Meta:
         model = Task
         fields = ["title", "description", "completed"]
 
 
+class TaskViewSet(ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer  # Lets ModelViewSet know which serailizer to call
+
+
+# Manually passing data to the TaskSerializer
 class TaskListAPI(APIView):
     def get(self, request):
         tasks = Task.objects.filter(deleted=False)

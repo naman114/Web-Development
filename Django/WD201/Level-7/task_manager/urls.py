@@ -28,9 +28,16 @@ from tasks.views import (
     GenericMarkTaskAsCompleteView,
     GenericAllTaskView,
 )
-from tasks.apiviews import TaskListAPI
 from django.contrib.auth.views import LogoutView
+
 from django.views.generic import RedirectView
+from rest_framework.routers import SimpleRouter
+from tasks.apiviews import TaskListAPI, TaskViewSet
+
+
+router = SimpleRouter()
+# Register task viewset with register
+router.register("api/task", TaskViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -48,5 +55,5 @@ urlpatterns = [
     path("user/login", UserLoginView.as_view()),
     path("user/logout", LogoutView.as_view()),
     path("sessiontest", session_storage_view),
-    path("taskapi/", TaskListAPI.as_view())
-]
+    path("taskapi/", TaskListAPI.as_view()),
+] + router.urls
