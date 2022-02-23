@@ -1,4 +1,4 @@
-from dataclasses import field
+from django.contrib.auth.models import User
 from tasks.models import Task
 
 # API view created in Django or Django API View
@@ -16,17 +16,38 @@ from rest_framework.serializers import ModelSerializer
 # Modelviewset is a bunch of views combined together
 # It implements all CRUD ops based on the model
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
 
-# Creating a generic class
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("first_name", "last_name", "username")
+
+
 class TaskSerializer(ModelSerializer):
+    # Nesting serializer for having user data with each task
+    # Without the following line, it would display the user's id only
+    # read_only means the user can't edit these fields
+    user = UserSerializer(read_only=True)
+
     class Meta:
         model = Task
-        fields = ["title", "description", "completed"]
+        fields = ["title", "description", "completed", "user"]
 
 
 class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer  # Lets ModelViewSet know which serailizer to call
+
+    # If the following conditions are true, the user has access to the api
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user, deleted=False)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 # Manually passing data to the TaskSerializer
