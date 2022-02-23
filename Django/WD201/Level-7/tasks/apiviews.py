@@ -26,6 +26,13 @@ from django_filters.rest_framework import (
     ChoiceFilter,
 )
 
+STATUS_CHOICES = (
+    ("PENDING", "PENDING"),
+    ("IN_PROGRESS", "IN_PROGRESS"),
+    ("COMPLETED", "COMPLETED"),
+    ("CANCELLED", "CANCELLED"),
+)
+
 
 class UserSerializer(ModelSerializer):
     class Meta:
@@ -35,6 +42,7 @@ class UserSerializer(ModelSerializer):
 
 class TaskFilter(FilterSet):
     title = CharFilter(lookup_expr="icontains")
+    status = ChoiceFilter(choices=STATUS_CHOICES)
 
 
 class TaskSerializer(ModelSerializer):
