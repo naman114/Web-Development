@@ -1,17 +1,18 @@
 from itertools import chain
-from queue import PriorityQueue
+
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db import transaction
+from django.forms import ModelForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.safestring import mark_safe
-from tasks.models import Task
-
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.forms import ModelForm
-from django.core.exceptions import ValidationError
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.list import ListView
+
+from tasks.models import Task
 
 
 class AuthorizedTaskManager(LoginRequiredMixin):
@@ -37,19 +38,28 @@ class TaskProgressManager:
         return context
 
 
-def handlePriorityCascading(new_priority, user):
-    # Fetching all pending tasks of the user
-    pending_tasks = Task.objects.filter(user=user, completed=False, deleted=False)
+def handlePriorityCascading(id, new_priority, user):
+    with transaction.atomic():
+        # Fetching all pending tasks of the user
+        pending_tasks = Task.objects.filter(
+            user=user, completed=False, deleted=False
+        ).select_for_update()
 
-    tasksToUpdate = []
+        pending_tasks = pending_tasks.exclude(id=id)
 
-    while pending_tasks.filter(priority=new_priority).exists():
-        taskToUpdate = pending_tasks.filter(priority=new_priority).first()
-        taskToUpdate.priority += 1
-        tasksToUpdate.append(taskToUpdate)
-        new_priority += 1
+        tasksToUpdate = []
 
-    Task.objects.bulk_update(tasksToUpdate, ["priority"])
+        while True:
+            try:
+                taskToUpdate = pending_tasks.get(priority=new_priority)
+                taskToUpdate.priority += 1
+                tasksToUpdate.append(taskToUpdate)
+                new_priority += 1
+
+            except ObjectDoesNotExist:
+                break
+
+        Task.objects.bulk_update(tasksToUpdate, ["priority"])
 
 
 ################################ Pending tasks ##########################################
@@ -163,10 +173,11 @@ class GenericTaskCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         new_priority = form.cleaned_data["priority"]
 
-        handlePriorityCascading(new_priority, self.request.user)
-
-        self.object = form.save()
+        self.object = form.save(commit=False)
         self.object.user = self.request.user
+
+        handlePriorityCascading(self.object.id, new_priority, self.request.user)
+
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -179,9 +190,11 @@ class GenericTaskUpdateView(AuthorizedTaskManager, UpdateView):
     success_url = "/tasks"
 
     def form_valid(self, form):
+        existing_priority = Task.objects.get(id=self.object.id).priority
         new_priority = form.cleaned_data["priority"]
 
-        handlePriorityCascading(new_priority, self.request.user)
+        if existing_priority != new_priority:
+            handlePriorityCascading(self.object.id, new_priority, self.request.user)
 
         self.object = form.save()
         return HttpResponseRedirect(self.get_success_url())
