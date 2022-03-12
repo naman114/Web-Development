@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/input.css" />
+  </head>
+  <body class="h-full">
+    <div
+      class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+    >
+      <div class="max-w-md w-full space-y-8">
+        <h2 class="mt-6 text-4xl font-bold text-gray-900">Todo Manager</h2>
+        <br />
+        <h3 class="text-xl">Signup</h3>
+        <form class="mt-8 space-y-6" action="#" method="POST">
+          <div>
+            <div>
+              <label for="username">Username</label>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+              />
+              <p class="text-sm">
+                Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+                only.
+              </p>
+            </div>
+            <br />
+            <div>
+              <label for="password">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+              />
+              <ul>
+                <li class="text-sm">
+                  Your password can't be too similar to your other personal
+                  information.
+                </li>
+                <li class="text-sm">
+                  Your password must contain at least 8 characters.
+                </li>
+                <li class="text-sm">
+                  Your password can't be a commonly used password.
+                </li>
+                <li class="text-sm">
+                  Your password can't be entirely numeric.
+                </li>
+              </ul>
+            </div>
+            <br />
+            <div>
+              <label for="confirm-password">Confirm Password</label>
+              <input
+                id="confirm-password"
+                name="confirm-password"
+                type="password"
+                required
+                class="mb-7 block w-full px-3 py-2 bg-gray-100 text-gray-900 rounded-lg"
+              />
+              <ul class="errorlist">
+                <li class="text-sm">
+                  The password is too similar to the username.
+                </li>
+                <li class="text-sm">
+                  This password is too short. It must contain at least 8
+                  characters.
+                </li>
+                <li class="text-sm">This password is too common.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              class="mt-8 group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+<style>
+  br {
+    display: none;
+  }
+</style>
