@@ -13,7 +13,7 @@ function App() {
     <AppContainer>
       <div className="p-4 mx-auto bg-white shadow-lg rounded-xl">
         <Header
-          title={"Welcome to lesson 5 of react-typescript with tailwindcss"}
+          title={"Welcome to the lesson 5 of react-typescript with tailwindcss"}
         ></Header>
         {formFields.map((field) => (
           <React.Fragment key={field.id}>
