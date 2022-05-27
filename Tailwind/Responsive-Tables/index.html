@@ -1,0 +1,68 @@
+<!-- https://css-tricks.com/responsive-data-tables/ -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="input.css" />
+  </head>
+  <body>
+    <table class="block w-screen border-collapse border border-slate-500">
+      <thead
+        class="absolute -top-[9999px] -left-[9999px] block md:relative md:top-0 md:left-0"
+      >
+        <tr
+          class="block border-2 border-solid border-slate-900 odd:bg-slate-500 md:inline"
+        >
+          <th class="block border border-slate-500 p-2 md:inline">
+            First Name
+          </th>
+          <th class="block border border-slate-500 p-2 md:inline">Last Name</th>
+          <th class="block border border-slate-500 p-2 md:inline">Job Title</th>
+        </tr>
+      </thead>
+      <tbody class="block md:inline">
+        <tr
+          class="block border-2 border-solid border-slate-900 odd:bg-slate-500"
+        >
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 first:before:content-['First_Name'] md:inline md:first:before:content-none"
+          >
+            James
+          </td>
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 second:before:content-['Last_Name'] md:inline md:second:before:content-none"
+          >
+            Matman
+          </td>
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 third:before:content-['Job_Title'] md:inline md:third:before:content-none"
+          >
+            Chief Sandwich Eater
+          </td>
+        </tr>
+        <tr
+          class="block border-2 border-solid border-slate-900 odd:bg-slate-500"
+        >
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 first:before:content-['First_Name'] md:inline md:first:before:content-none"
+          >
+            The
+          </td>
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 second:before:content-['Last_Name'] md:inline md:second:before:content-none"
+          >
+            Tick
+          </td>
+          <td
+            class="relative block whitespace-nowrap border border-b-2 border-none border-slate-500 p-2 pr-3 text-center before:absolute before:top-2 before:left-2 third:before:content-['Job_Title'] md:inline md:third:before:content-none"
+          >
+            Crimefighter Sorta
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
