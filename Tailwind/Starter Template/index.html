@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tailwind CSS</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link rel="stylesheet" href="input.css" />
+  </head>
+  <body>
+    <nav class="py-4 bg-purple-900 text-white">
+      <ul class="space-x-7 px-10 flex justify-end">
+        <li class="mx-2 cursor-pointer">Home</li>
+        <li class="mx-2 cursor-pointer">About</li>
+        <li class="mx-2 cursor-pointer">Contact</li>
+      </ul>
+    </nav>
+    <h1 class="text-blue-900">This is a heading</h1>
+  </body>
+</html>
+<!-- 
+  Production Setup:
+  1. npm init -y
+  2. npm install -D tailwindcss vite
+  (Add new script -> "start": "vite")
+  3. npx tailwindcss init -p
+  (-p for postcss config file)
+  4. Set content: ["*"] in tailwind.config.js
+  5. Make input.css file, add the following, link to it in index.html
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  
+  npm start should work now
+ -->
