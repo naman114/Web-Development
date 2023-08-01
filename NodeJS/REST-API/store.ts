@@ -17,12 +17,38 @@ export const store = {
 
     return userToCreate;
   },
+
   readUser(id: number) {
     const users: User[] = getUsers();
     return users.find((user) => user.id === id);
   },
-  updateUsers() {},
-  deleteUsers() {},
+
+  updateUsers(id: number, userUpdates: Partial<User>) {
+    const users: User[] = getUsers();
+    const userIdx = users.map((user) => user.id).indexOf(id);
+
+    if (userIdx === -1) return null;
+
+    users[userIdx] = { ...users[userIdx], ...userUpdates };
+
+    writeUsers(users);
+
+    return users[userIdx];
+  },
+
+  deleteUsers(id: number) {
+    const users: User[] = getUsers();
+
+    const user = users.find((user) => user.id === id);
+
+    if (!user) return null;
+
+    const usersPostDeletion = users.filter((user) => user.id !== id);
+
+    writeUsers(usersPostDeletion);
+
+    return user;
+  },
 };
 
 function getUsers() {

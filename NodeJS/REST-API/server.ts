@@ -36,6 +36,32 @@ app.get("/api/user/:id", (req: Request, res: Response) => {
   res.json({ ok: true, user });
 });
 
+app.patch(
+  "/api/user/:id",
+  (
+    req: Request<never, never, { username?: string; age?: number }>,
+    res: Response
+  ) => {
+    const { id } = req.params;
+
+    const user = store.updateUsers(Number(id), req.body);
+
+    if (!user) return res.status(404).json({ ok: false });
+
+    res.json({ ok: true, user });
+  }
+);
+
+app.delete("/api/user/:id/", (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const user = store.deleteUsers(Number(id));
+
+  if (!user) return res.status(404).json({ ok: false });
+
+  res.json({ ok: true, user });
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Backend is running on http://localhost:${PORT}/`);
 });

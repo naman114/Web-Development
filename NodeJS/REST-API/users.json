@@ -1,18 +1,13 @@
 [
     {
-        "id": 1,
-        "username": "Arsh",
-        "age": 22
-    },
-    {
         "id": 2,
         "username": "Naman",
         "age": 22
     },
     {
         "id": 3,
-        "username": "Matt",
-        "age": 22
+        "username": "Matt Damon",
+        "age": 18
     },
     {
         "id": 4,
