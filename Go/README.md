@@ -1,3 +1,5 @@
+[How To add VSCode Autocomplete for Golang](https://medium.com/backend-habit/setting-golang-plugin-on-vscode-for-autocomplete-and-auto-import-30bf5c58138a)
+
 ## Hello World
 
 1. `go mod init example/hello` to start a Go project.
@@ -36,3 +38,9 @@
 > Go functions can return multiple values
 
 > errors is a Go standard library for error handling
+
+## Random Function
+
+> Go slice is like C++ vector
+>
+> `formats := []string{}` - empty brackets tells Go that the size of this array can be dynamically changed

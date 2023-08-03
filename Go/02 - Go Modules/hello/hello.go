@@ -14,7 +14,7 @@ func main() {
 	// With above line: greetings: empty name
 
     // Get a greeting message and print it.
-    message, err := greetings.Hello("")
+    message, err := greetings.Hello("Naman")
 	if err != nil {
 		log.Fatal(err) // prints the error and stops the program
 	}
