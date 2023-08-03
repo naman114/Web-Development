@@ -7,7 +7,7 @@ package main // package is a way to group functions. Consists of all files in th
 import "fmt" // Standard library package
 import "rsc.io/quote" // To locate and download the latest version of new packages -> go mod tidy
 
-// main function executes bty default when you run the main package
+// main function executes by default when you run the main package
 // go run .
 // go help -> get all commands
 func main() {
