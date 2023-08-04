@@ -55,3 +55,11 @@
     myMap := make(map[string]string)
 
 > If you have published a package and users are using the functions you defined, it is not a good idea to modify their input args because that will break their code.
+
+## Testing
+
+> Test function names have the form TestName, where Name says something about the specific test.
+>
+> Test functions take a pointer to the testing package's testing.T type as a parameter to report and log
+>
+> `go test` command looks for `_test.go` files having function names start with Test. `go test -v` prints verbose output for all tests. Don't use `-v` if you have a lot of tests and want to see only the failing tests
