@@ -63,3 +63,19 @@
 > Test functions take a pointer to the testing package's testing.T type as a parameter to report and log
 >
 > `go test` command looks for `_test.go` files having function names start with Test. `go test -v` prints verbose output for all tests. Don't use `-v` if you have a lot of tests and want to see only the failing tests
+
+## Compile and Install The Application
+
+> `go build` creates an executable
+
+> `./createdExecutableName` will invoke it on Linux/Mac
+
+> Add the Go install directory to your system's shell path:
+>
+> `go list -f '{{.Target}}'`
+>
+> `export PATH=$PATH:/path/to/your/install/directory`
+>
+> `go install`
+>
+> You can now invoke the main package from any directory
