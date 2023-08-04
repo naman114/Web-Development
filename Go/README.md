@@ -44,3 +44,14 @@
 > Go slice is like C++ vector
 >
 > `formats := []string{}` - empty brackets tells Go that the size of this array can be dynamically changed
+
+## Loop, Map and Backward Compatibility
+
+    // For loop
+    for idx, val := range mySlice {
+
+    }
+    // Create map
+    myMap := make(map[string]string)
+
+> If you have published a package and users are using the functions you defined, it is not a good idea to modify their input args because that will break their code.

@@ -1,10 +1,10 @@
 package main
 
 import (
-    "fmt"
+	"fmt"
 	"log"
 
-    "example.com/greetings"
+	"example.com/greetings"
 )
 
 func main() {
@@ -14,10 +14,17 @@ func main() {
 	// With above line: greetings: empty name
 
     // Get a greeting message and print it.
-    message, err := greetings.Hello("Naman")
+    // message, err := greetings.Hello("Naman")
+
+
+	// A slice of names.
+    names := []string{"Gladys", "Samantha", "Darrin"}
+    // Request greeting messages for the names.
+    messages, err := greetings.Hellos(names)
+
 	if err != nil {
 		log.Fatal(err) // prints the error and stops the program
 	}
 
-    fmt.Println(message)
+    fmt.Println(messages)
 }
